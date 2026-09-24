@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Register — MediQueue</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="navbar">
+  <div class="container nav-inner">
+    <a href="index.html" class="logo">
+      <span class="logo-mark">MQ</span>
+      MediQueue
+    </a>
+    <button class="nav-toggle" aria-label="Toggle navigation">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="book-appointment.html">Book Appointment</a></li>
+      <li><a href="my-token.html">Live Queue</a></li>
+      <li><a href="login.html">Login</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a href="login.html" class="btn btn-primary btn-sm">Login</a>
+      <a href="settings.html" class="nav-icon-btn" aria-label="Settings" title="Settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 11-4 0v-.09a1.65 1.65 0 00-1-1.51 1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 110-4h.09a1.65 1.65 0 001.51-1 1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 114 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 110 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+      </a>
+      <button type="button" class="theme-toggle-btn" id="theme-toggle" aria-label="Toggle theme" title="Toggle Dark/Light Mode">
+        <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="auth-shell">
+
+  <div class="auth-visual">
+    <div>
+      <div class="eyebrow-plain">Join MediQueue</div>
+      <h2>One account. Every future visit, one token away.</h2>
+      <p>Registering takes under a minute, and doctors get an approval step before their profile goes live.</p>
+    </div>
+    <div class="board">
+      <div class="board-title"><span>THIS WEEK</span><span>128 REGISTERED</span></div>
+      <div class="board-row">
+        <span class="token-code">+42</span>
+        <span class="token-meta"><div class="token-dept">New patients</div><div class="token-status">Last 7 days</div></span>
+      </div>
+      <div class="board-row">
+        <span class="token-code">+3</span>
+        <span class="token-meta"><div class="token-dept">New doctors</div><div class="token-status">Pending review</div></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="auth-form-side">
+    <div class="auth-card">
+      <h1>Create an account</h1>
+      <p>Choose your role to continue.</p>
+
+      <div class="role-tabs">
+        <button type="button" class="role-tab active" data-role="patient">Patient</button>
+        <button type="button" class="role-tab" data-role="doctor">Doctor</button>
+      </div>
+
+      <!-- Patient registration -->
+      <form data-role-panel="patient" data-simulate data-redirect="login.html" style="display:block;">
+        <div class="alert alert-success">Account created. Redirecting you to log in…</div>
+        <div class="alert alert-error">Please check the highlighted fields.</div>
+
+        <div class="form-grid">
+          <div class="field">
+            <label for="p-fname">Full name</label>
+            <input type="text" id="p-fname" name="full_name" placeholder="Aditi Sharma" required>
+          </div>
+          <div class="field">
+            <label for="p-phone">Phone number</label>
+            <input type="tel" id="p-phone" name="phone" placeholder="98765 43210" required>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="p-email">Email address</label>
+          <input type="email" id="p-email" name="email" placeholder="you@example.com" required>
+        </div>
+
+        <div class="form-grid">
+          <div class="field">
+            <label for="p-age">Age</label>
+            <input type="number" id="p-age" name="age" min="0" placeholder="28" required>
+          </div>
+          <div class="field">
+            <label for="p-gender">Gender</label>
+            <select id="p-gender" name="gender" required>
+              <option value="">Select</option>
+              <option>Female</option>
+              <option>Male</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div class="field">
+            <label for="p-password">Password</label>
+            <input type="password" id="p-password" name="password" placeholder="••••••••" required>
+          </div>
+          <div class="field">
+            <label for="p-cpassword">Confirm password</label>
+            <input type="password" id="p-cpassword" name="confirm_password" placeholder="••••••••" required>
+            <div class="field-error">Passwords don't match.</div>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">Create patient account</button>
+      </form>
+
+      <!-- Doctor registration -->
+      <form data-role-panel="doctor" data-simulate data-redirect="login.html" style="display:none;">
+        <div class="alert alert-success">Application submitted. We'll email you once it's approved.</div>
+        <div class="alert alert-error">Please check the highlighted fields.</div>
+
+        <div class="form-grid">
+          <div class="field">
+            <label for="d-fname">Full name</label>
+            <input type="text" id="d-fname" name="full_name" placeholder="Dr. Rohan Verma" required>
+          </div>
+          <div class="field">
+            <label for="d-phone">Phone number</label>
+            <input type="tel" id="d-phone" name="phone" placeholder="98765 43210" required>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="d-email">Hospital email</label>
+          <input type="email" id="d-email" name="email" placeholder="you@hospital.com" required>
+        </div>
+
+        <div class="form-grid">
+          <div class="field">
+            <label for="d-dept">Department</label>
+            <select id="d-dept" name="department" required>
+              <option value="">Select</option>
+              <option>Cardiology</option>
+              <option>Orthopaedics</option>
+              <option>Pediatrics</option>
+              <option>General Medicine</option>
+              <option>Dermatology</option>
+              <option>Neurology</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="d-license">Medical license no.</label>
+            <input type="text" id="d-license" name="license" placeholder="MCI-098234" required>
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div class="field">
+            <label for="d-password">Password</label>
+            <input type="password" id="d-password" name="password" placeholder="••••••••" required>
+          </div>
+          <div class="field">
+            <label for="d-cpassword">Confirm password</label>
+            <input type="password" id="d-cpassword" name="confirm_password" placeholder="••••••••" required>
+            <div class="field-error">Passwords don't match.</div>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-teal btn-block">Submit doctor application</button>
+      </form>
+
+      <div class="auth-switch">Already have an account? <a href="login.html" class="link-teal">Log in</a></div>
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

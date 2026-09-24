@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Log in — MediQueue</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="navbar">
+  <div class="container nav-inner">
+    <a href="index.html" class="logo">
+      <span class="logo-mark">MQ</span>
+      MediQueue
+    </a>
+    <button class="nav-toggle" aria-label="Toggle navigation">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="book-appointment.html">Book Appointment</a></li>
+      <li><a href="my-token.html">Live Queue</a></li>
+      <li><a href="register.html">Register</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a href="register.html" class="btn btn-outline btn-sm">Register</a>
+      <a href="login.html" class="btn btn-primary btn-sm">Login</a>
+      <a href="settings.html" class="nav-icon-btn" aria-label="Settings" title="Settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 11-4 0v-.09a1.65 1.65 0 00-1-1.51 1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 110-4h.09a1.65 1.65 0 001.51-1 1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 114 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 110 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+      </a>
+      <button type="button" class="theme-toggle-btn" id="theme-toggle" aria-label="Toggle theme" title="Toggle Dark/Light Mode">
+        <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="auth-shell">
+
+  <div class="auth-visual">
+    <div>
+      <div class="eyebrow-plain">Welcome back</div>
+      <h2>Pick up right where the queue left off.</h2>
+      <p>Sign in to book new appointments, check your live token position, or manage today's patient list.</p>
+    </div>
+    <div class="board">
+      <div class="board-title"><span>TODAY</span><span>3 DEPARTMENTS</span></div>
+      <div class="board-row">
+        <span class="token-code">C-104</span>
+        <span class="token-meta"><div class="token-dept">Cardiology</div><div class="token-status">In consultation</div></span>
+      </div>
+      <div class="board-row">
+        <span class="token-code">G-231</span>
+        <span class="token-meta"><div class="token-dept">General Medicine</div><div class="token-status waiting">4 waiting</div></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="auth-form-side">
+    <div class="auth-card">
+      <h1>Log in</h1>
+      <p>Choose your role to continue.</p>
+
+      <div class="role-tabs">
+        <button type="button" class="role-tab active" data-role="patient">Patient</button>
+        <button type="button" class="role-tab" data-role="doctor">Doctor</button>
+      </div>
+
+      <!-- Patient login -->
+      <form data-role-panel="patient" data-simulate data-redirect="dashboard.html" style="display:block;">
+        <div class="alert alert-success">Logged in successfully. Taking you to your dashboard…</div>
+        <div class="alert alert-error">Please fill in both fields correctly.</div>
+
+        <div class="field">
+          <label for="patient-email">Email address</label>
+          <input type="email" id="patient-email" name="email" placeholder="you@example.com" required>
+        </div>
+        <div class="field">
+          <label for="patient-password">Password</label>
+          <input type="password" id="patient-password" name="password" placeholder="••••••••" required>
+          <div class="field-error">This field is required.</div>
+        </div>
+
+        <div class="row-between">
+          <label class="checkbox-row"><input type="checkbox"> Remember me</label>
+          <a href="forgot-password.html" class="link-teal">Forgot password?</a>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">Log in as Patient</button>
+      </form>
+
+      <!-- Doctor login -->
+      <form data-role-panel="doctor" data-simulate data-redirect="doctor-dashboard.html" style="display:none;">
+        <div class="alert alert-success">Logged in successfully. Taking you to Doctor Station…</div>
+        <div class="alert alert-error">Please fill in both fields correctly.</div>
+
+        <div class="field">
+          <label for="doctor-id">Doctor ID or email</label>
+          <input type="text" id="doctor-id" name="email" placeholder="DR-004, doctor email, or doctor name" required>
+          <div class="field-hint" style="font-size:0.75rem; color:var(--teal);">Demo Login: DR-004 / doctor123 (Dr. Rohan Verma)</div>
+        </div>
+        <div class="field">
+          <label for="doctor-password">Password</label>
+          <input type="password" id="doctor-password" name="password" placeholder="••••••••" required>
+          <div class="field-error">This field is required.</div>
+        </div>
+
+        <div class="row-between">
+          <label class="checkbox-row"><input type="checkbox"> Remember me</label>
+          <a href="forgot-password.html" class="link-teal">Forgot password?</a>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">Log in to Doctor Station</button>
+      </form>
+
+      <div class="auth-switch">Don't have an account? <a href="register.html" class="link-teal">Register here</a></div>
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

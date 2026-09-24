@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Doctor Dashboard — MediQueue Clinical Station</title>
+<meta name="description" content="Next-generation outpatient queue management and digital prescription workstation for doctors.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- ===== Global Header / Navbar ===== -->
+<header class="navbar">
+  <div class="container nav-inner">
+    <a href="index.html" class="logo">
+      <span class="logo-mark">MQ</span>
+      MediQueue
+    </a>
+    
+    <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+
+    <ul class="nav-links">
+      <li><a href="doctor-dashboard.html" class="active">Doctor Station <span class="nav-pill-badge">MD</span></a></li>
+      <li><a href="my-token.html">Live OPD Queue</a></li>
+      <li><a href="index.html">Home</a></li>
+    </ul>
+
+    <div class="nav-cta">
+      <div class="nav-user-badge">
+        <div class="avatar-sm" id="nav-doc-initials">RV</div>
+        <span id="nav-doc-name">Dr. Rohan</span>
+        <span class="role-tag doctor">Doctor</span>
+      </div>
+
+      <button class="btn btn-ghost btn-sm" id="doctor-logout-btn">Log out</button>
+
+      <a href="settings.html" class="nav-icon-btn" aria-label="Settings" title="Settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 11-4 0v-.09a1.65 1.65 0 00-1-1.51 1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 110-4h.09a1.65 1.65 0 001.51-1 1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 114 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 110 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+      </a>
+
+      <!-- Theme Switcher on the right side -->
+      <button type="button" class="theme-toggle-btn" id="theme-toggle" aria-label="Toggle theme" title="Toggle Dark/Light Mode">
+        <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none;"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ===== App Header ===== -->
+<div class="app-header">
+  <div class="container">
+    <div class="app-header-row">
+      <div>
+        <div class="section-label" style="margin-bottom:6px;">CLINICAL WORKSTATION & EHR</div>
+        <h1 id="doc-hero-name">Dr. Rohan Verma, MD</h1>
+        <p id="doc-hero-sub">Department of General Medicine · Consultation Room 101 · MCI Reg: MCI-101556</p>
+      </div>
+      <div style="display:flex; gap:10px; align-items:center;">
+        <button type="button" class="btn btn-secondary btn-sm" id="btn-emergency-modal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v20M2 12h20"/></svg>
+          Emergency Walk-In
+        </button>
+        <button type="button" class="btn btn-primary btn-sm" id="btn-call-next-header">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          Call Next Patient
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="app-body">
+  <div class="container">
+
+    <!-- ===== Doctor OPD Command Bar ===== -->
+    <div class="doctor-opd-bar">
+      <div class="doc-info-group">
+        <div class="doc-avatar-badge" id="doc-badge-avatar">RV</div>
+        <div>
+          <div class="doc-title-row">
+            <h3 id="doc-bar-name">Dr. Rohan Verma</h3>
+            <span class="pill pill-serving" id="opd-live-pill">OPD Active</span>
+          </div>
+          <div class="doc-meta-pills">
+            <span class="doc-badge-pill" id="doc-bar-dept">General Medicine</span>
+            <span class="doc-badge-pill" id="doc-bar-room">Room 101</span>
+            <span class="doc-badge-pill">Hours: 08:00 – 14:00</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="doc-controls-group">
+        <!-- Switch Doctor Profile -->
+        <div style="display:flex; align-items:center; gap:8px;">
+          <label for="select-doctor-profile" style="font-size:0.8rem; font-weight:700; color:var(--slate);">Doctor:</label>
+          <select id="select-doctor-profile" class="queue-filter-select" style="max-width:210px;">
+            <!-- Populated dynamically by script.js -->
+          </select>
+        </div>
+
+        <!-- OPD Status -->
+        <div class="opd-status-selector">
+          <span style="font-size:0.78rem; font-weight:700; color:var(--slate);">Status:</span>
+          <select id="select-opd-status">
+            <option value="active">🟢 Active & Calling</option>
+            <option value="break">🟡 On 15m Break</option>
+            <option value="closed">🔴 OPD Offline</option>
+          </select>
+        </div>
+
+        <!-- Chime Sound Alert Toggle -->
+        <button type="button" class="chime-btn active" id="btn-toggle-sound" title="Token call audio chime on/off">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.08"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- ===== Key Metrics Stat Grid ===== -->
+    <div class="stat-grid">
+      <div class="stat-card accent">
+        <div class="stat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div class="stat-value" id="stat-active-token">—</div>
+        <div class="stat-label">Currently in Consultation</div>
+      </div>
+
+      <div class="stat-card amber">
+        <div class="stat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <div class="stat-value" id="stat-waiting-count">0</div>
+        <div class="stat-label">Patients Waiting in Queue</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon" style="background:var(--success-light); color:var(--success); border-color:rgba(16, 185, 129, 0.3);">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="stat-value" id="stat-completed-count">0</div>
+        <div class="stat-label">Consultations Done Today</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon" style="background:var(--cyan-light); color:var(--cyan); border-color:rgba(56, 189, 248, 0.3);">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 8 14"/></svg>
+        </div>
+        <div class="stat-value" id="stat-avg-time">~9 min</div>
+        <div class="stat-label">Avg Consultation Pace</div>
+      </div>
+    </div>
+
+    <!-- ===== Main Operational Split-View ===== -->
+    <div class="doctor-layout-grid">
+
+      <!-- LEFT COLUMN: Active Consultation & Digital Prescription Pad -->
+      <div>
+        
+        <!-- Active Patient in Room -->
+        <div class="consultation-active-card" id="consultation-box">
+          <div class="consultation-header">
+            <div>
+              <div style="display:flex; align-items:center; gap:10px; margin-bottom:6px;">
+                <span class="pill pill-serving" id="active-consult-pill">In Consultation</span>
+                <span style="font-size:0.8rem; color:var(--slate);" id="active-consult-time">Arrived at 09:15 AM</span>
+              </div>
+              <h2 id="active-patient-name" style="margin:0; font-size:1.4rem;">Aditi Sharma</h2>
+              <div style="font-size:0.86rem; color:var(--slate); margin-top:2px;" id="active-patient-contact">Phone: 9876543210 · Visit #3</div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:0.7rem; font-weight:700; color:var(--slate); text-transform:uppercase; letter-spacing:0.08em;">Token ID</div>
+              <div class="consult-token-tag" id="active-token-id">G-231</div>
+            </div>
+          </div>
+
+          <!-- Patient Vitals Bar -->
+          <div class="patient-vitals-bar">
+            <div class="vital-item">
+              <span class="vital-label">Age / Gender</span>
+              <span class="vital-val" id="vital-age-gender">28 / F</span>
+            </div>
+            <div class="vital-item">
+              <span class="vital-label">Blood Group</span>
+              <span class="vital-val" id="vital-blood">O+</span>
+            </div>
+            <div class="vital-item">
+              <span class="vital-label">Blood Pressure</span>
+              <span class="vital-val" id="vital-bp">120/80 mmHg</span>
+            </div>
+            <div class="vital-item">
+              <span class="vital-label">Pulse / SpO2</span>
+              <span class="vital-val" id="vital-spo2">76 bpm / 99%</span>
+            </div>
+          </div>
+
+          <!-- Chief Complaint / Reason -->
+          <div style="background:var(--panel-elevated); border:1px solid var(--line); border-radius:var(--r-s); padding:12px 14px; margin-bottom:20px;">
+            <div style="font-size:0.75rem; font-weight:700; color:var(--teal); text-transform:uppercase; margin-bottom:4px;">Chief Complaint / Reason for Visit</div>
+            <div id="active-patient-reason" style="font-size:0.92rem; color:var(--ink); font-weight:500;">
+              High fever, productive cough with throat irritation for past 3 days.
+            </div>
+          </div>
+
+          <!-- Prescription & EHR Composer -->
+          <div class="prescription-pad">
+            <div class="rx-header">
+              <span class="rx-symbol">℞</span>
+              <span>Digital Clinical Prescription & Orders</span>
+            </div>
+
+            <!-- Diagnosis -->
+            <div class="field" style="margin-bottom:14px;">
+              <label for="rx-diagnosis">Provisional Clinical Diagnosis</label>
+              <input type="text" id="rx-diagnosis" value="Acute Upper Respiratory Tract Infection (URTI) with mild pyrexia" placeholder="Enter diagnosis or click quick tags below">
+            </div>
+
+            <!-- Quick Diagnosis Chips -->
+            <div class="quick-chips-row">
+              <button type="button" class="quick-chip" onclick="document.getElementById('rx-diagnosis').value='Acute Viral Pharyngitis / URTI'">Viral Pharyngitis</button>
+              <button type="button" class="quick-chip" onclick="document.getElementById('rx-diagnosis').value='Hypertension Stage 1, routine follow-up'">Hypertension</button>
+              <button type="button" class="quick-chip" onclick="document.getElementById('rx-diagnosis').value='Acute Gastroenteritis with moderate dehydration'">Gastroenteritis</button>
+              <button type="button" class="quick-chip" onclick="document.getElementById('rx-diagnosis').value='Type 2 Diabetes Mellitus, glycemic review'">Type 2 Diabetes</button>
+              <button type="button" class="quick-chip" onclick="document.getElementById('rx-diagnosis').value='Allergic Rhinitis & Sinusitis'">Allergic Rhinitis</button>
+              <button type="button" class="quick-chip" onclick="document.getElementById('rx-diagnosis').value='Musculoskeletal Lumbago / Lower Back Strain'">Lumbar Strain</button>
+            </div>
+
+            <!-- Prescribed Medications Table -->
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+              <label style="font-size:0.82rem; font-weight:700; color:var(--ink);">Prescribed Medications</label>
+              <button type="button" class="btn btn-ghost btn-sm" id="btn-add-med-row" style="font-size:0.78rem; padding:4px 10px;">+ Add Custom Medicine</button>
+            </div>
+
+            <!-- Quick Add Medication Tags -->
+            <div class="quick-chips-row" style="margin-bottom:10px;">
+              <span style="font-size:0.74rem; color:var(--slate); align-self:center;">Quick Add:</span>
+              <button type="button" class="quick-chip" onclick="mqAddMedicineRow('Paracetamol', '650 mg', '1-0-1', '5 days', 'After meals')">+ Paracetamol 650mg</button>
+              <button type="button" class="quick-chip" onclick="mqAddMedicineRow('Amoxicillin + Clav', '625 mg', '1-0-1', '5 days', 'After meals')">+ Augmentin 625mg</button>
+              <button type="button" class="quick-chip" onclick="mqAddMedicineRow('Pantoprazole', '40 mg', '1-0-0', '7 days', 'Before breakfast')">+ Pan 40mg</button>
+              <button type="button" class="quick-chip" onclick="mqAddMedicineRow('Cetirizine', '10 mg', '0-0-1', '5 days', 'Bedtime')">+ Cetirizine 10mg</button>
+              <button type="button" class="quick-chip" onclick="mqAddMedicineRow('Azithromycin', '500 mg', '1-0-0', '3 days', '1 hr before meals')">+ Azithromycin 500mg</button>
+            </div>
+
+            <div class="table-responsive">
+              <table class="meds-table" id="rx-meds-table" style="min-width:540px;">
+                <thead>
+                  <tr>
+                    <th style="width:34%;">Medicine Name</th>
+                    <th style="width:18%;">Dosage</th>
+                    <th style="width:16%;">Freq (M-A-N)</th>
+                    <th style="width:14%;">Duration</th>
+                    <th style="width:18%;">Instructions</th>
+                    <th style="width:5%;"></th>
+                  </tr>
+                </thead>
+                <tbody id="rx-meds-body">
+                  <tr>
+                    <td><input type="text" value="Tab. Paracetamol" class="rx-m-name" placeholder="Medicine"></td>
+                    <td><input type="text" value="650 mg" class="rx-m-dose" placeholder="Dosage"></td>
+                    <td>
+                      <select class="rx-m-freq">
+                        <option value="1-0-1" selected>1-0-1 (Twice daily)</option>
+                        <option value="1-1-1">1-1-1 (Thrice daily)</option>
+                        <option value="1-0-0">1-0-0 (Morning only)</option>
+                        <option value="0-0-1">0-0-1 (Night only)</option>
+                        <option value="SOS">SOS (As needed)</option>
+                      </select>
+                    </td>
+                    <td><input type="text" value="5 days" class="rx-m-dur" placeholder="Days"></td>
+                    <td><input type="text" value="After food" class="rx-m-inst" placeholder="Instructions"></td>
+                    <td><button type="button" class="btn-del-med" onclick="this.closest('tr').remove()" title="Delete">✕</button></td>
+                  </tr>
+                  <tr>
+                    <td><input type="text" value="Cap. Amoxicillin + Clav" class="rx-m-name" placeholder="Medicine"></td>
+                    <td><input type="text" value="625 mg" class="rx-m-dose" placeholder="Dosage"></td>
+                    <td>
+                      <select class="rx-m-freq">
+                        <option value="1-0-1" selected>1-0-1 (Twice daily)</option>
+                        <option value="1-1-1">1-1-1 (Thrice daily)</option>
+                        <option value="1-0-0">1-0-0 (Morning only)</option>
+                        <option value="0-0-1">0-0-1 (Night only)</option>
+                      </select>
+                    </td>
+                    <td><input type="text" value="5 days" class="rx-m-dur" placeholder="Days"></td>
+                    <td><input type="text" value="After food" class="rx-m-inst" placeholder="Instructions"></td>
+                    <td><button type="button" class="btn-del-med" onclick="this.closest('tr').remove()" title="Delete">✕</button></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Recommended Lab Tests -->
+            <div style="margin-top:16px;">
+              <label style="font-size:0.82rem; font-weight:700; color:var(--ink); display:block; margin-bottom:8px;">Diagnostic Investigations & Lab Orders (Optional)</label>
+              <div style="display:flex; flex-wrap:wrap; gap:12px; font-size:0.84rem; color:var(--slate);">
+                <label class="checkbox-row"><input type="checkbox" id="lab-cbc" checked> Complete Blood Count (CBC)</label>
+                <label class="checkbox-row"><input type="checkbox" id="lab-fbs"> Fasting Blood Sugar</label>
+                <label class="checkbox-row"><input type="checkbox" id="lab-lipid"> Lipid Panel</label>
+                <label class="checkbox-row"><input type="checkbox" id="lab-xray"> Chest X-Ray PA View</label>
+                <label class="checkbox-row"><input type="checkbox" id="lab-ecg"> 12-Lead ECG</label>
+                <label class="checkbox-row"><input type="checkbox" id="lab-lft"> Liver Function Test (LFT)</label>
+              </div>
+            </div>
+
+            <!-- Doctor Notes & Advice -->
+            <div class="field" style="margin-top:16px; margin-bottom:14px;">
+              <label for="rx-advice">Doctor's Clinical Advice & Lifestyle Guidance</label>
+              <textarea id="rx-advice" rows="2" placeholder="Diet, hydration, activity restrictions, warning signs...">Hydrate adequately (>2.5L/day), warm saline gargles thrice daily, rest for 3 days. Return to emergency if breathlessness develops.</textarea>
+            </div>
+
+            <!-- Follow-up -->
+            <div style="display:flex; align-items:center; gap:12px; margin-bottom:20px;">
+              <label style="font-size:0.82rem; font-weight:700; color:var(--ink);">Recommended Follow-Up:</label>
+              <select id="rx-followup" class="queue-filter-select" style="max-width:180px;">
+                <option value="5 days">After 5 days</option>
+                <option value="7 days">After 7 days</option>
+                <option value="14 days">After 2 weeks</option>
+                <option value="1 month">After 1 month</option>
+                <option value="SOS">SOS / As required</option>
+              </select>
+            </div>
+
+            <!-- Consultation Actions -->
+            <div style="display:flex; gap:12px; flex-wrap:wrap;">
+              <button type="button" class="btn btn-primary btn-lg" id="btn-complete-consultation" style="flex:1;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                Complete & Issue Prescription
+              </button>
+              <button type="button" class="btn btn-cyan" id="btn-preview-rx" title="View printable preview">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                Preview Rx
+              </button>
+              <button type="button" class="btn btn-danger" id="btn-noshow-consultation" title="Mark patient as No-Show or cancelled">
+                No-Show
+              </button>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Empty State when no patient is in consultation -->
+        <div id="consultation-empty" class="panel-card" style="display:none; text-align:center; padding:48px 24px;">
+          <div style="width:64px; height:64px; border-radius:50%; background:var(--teal-light); color:var(--teal); display:flex; align-items:center; justify-content:center; margin:0 auto 16px;">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          </div>
+          <h2>Consultation Room Ready</h2>
+          <p style="margin:0 auto 20px;">No patient is currently in the room. Call the next patient from the waiting queue to begin consultation.</p>
+          <button type="button" class="btn btn-primary btn-lg" id="btn-call-next-empty">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            Call Next Patient Now
+          </button>
+        </div>
+
+      </div>
+
+      <!-- RIGHT COLUMN: Live Waiting Queue & Patient Directory -->
+      <div>
+
+        <!-- Queue Management Card -->
+        <div class="queue-control-card">
+          <div class="panel-card-header">
+            <div>
+              <h2 style="font-size:1.2rem;">Live OPD Queue</h2>
+              <div style="font-size:0.8rem; color:var(--slate); margin-top:2px;" id="queue-subhead">Patients waiting for Dr. Rohan Verma</div>
+            </div>
+            <button type="button" class="btn btn-primary btn-sm" id="btn-call-next-queue">
+              Call Next
+            </button>
+          </div>
+
+          <!-- Queue Search & Filter Bar -->
+          <div class="queue-search-row">
+            <input type="text" id="queue-search-input" placeholder="Search by token, patient name, or phone...">
+            <select id="queue-status-filter" class="queue-filter-select">
+              <option value="all">All Status</option>
+              <option value="Waiting" selected>Waiting</option>
+              <option value="In Consultation">In Room</option>
+              <option value="Done">Completed</option>
+            </select>
+          </div>
+
+          <!-- Queue List Container -->
+          <div id="queue-list-container" style="display:flex; flex-direction:column; gap:8px;">
+            <!-- Rendered dynamically by script.js -->
+          </div>
+
+          <!-- Empty queue notification -->
+          <div id="queue-empty-msg" style="display:none; text-align:center; padding:32px 16px; color:var(--slate);">
+            <div style="font-size:1.8rem; margin-bottom:8px;">🎉</div>
+            <div style="font-weight:700; color:var(--ink); margin-bottom:4px;">No patients waiting in queue</div>
+            <div style="font-size:0.85rem;">All appointments for this session have been completed or none booked yet.</div>
+          </div>
+        </div>
+
+        <!-- Cross-Department Queue Monitor -->
+        <div class="panel-card" style="margin-top:24px;">
+          <div class="panel-card-header">
+            <h2>Hospital OPD Monitor</h2>
+            <span class="board-live">Real-time</span>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:10px;" id="dept-monitor-list">
+            <!-- Filled dynamically with hospital departments -->
+          </div>
+        </div>
+
+        <!-- Quick Patient Walk-In Card -->
+        <div class="panel-card">
+          <h2>Quick OPD Walk-In Entry</h2>
+          <p style="font-size:0.85rem; margin-bottom:14px;">Directly issue an emergency or walk-in token into your queue without leaving this station.</p>
+          <form id="quick-walkin-form">
+            <div class="field">
+              <label for="qw-name">Patient Full Name</label>
+              <input type="text" id="qw-name" placeholder="e.g. Ramesh Patel" required>
+            </div>
+            <div class="form-grid">
+              <div class="field">
+                <label for="qw-phone">Contact Phone</label>
+                <input type="tel" id="qw-phone" placeholder="9876543210" required>
+              </div>
+              <div class="field">
+                <label for="qw-priority">Priority Level</label>
+                <select id="qw-priority">
+                  <option value="Normal">Normal Walk-In</option>
+                  <option value="Urgent">🚨 Urgent / Priority</option>
+                </select>
+              </div>
+            </div>
+            <div class="field">
+              <label for="qw-reason">Chief Symptoms / Reason</label>
+              <input type="text" id="qw-reason" placeholder="Chest pain, acute fever, suture removal...">
+            </div>
+            <button type="submit" class="btn btn-outline btn-block">+ Add to Doctor Queue</button>
+          </form>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== Digital Prescription Print Preview Modal ===== -->
+<div class="modal-overlay" id="rx-modal-overlay">
+  <div class="modal-card" style="max-width:680px; max-height:90vh; overflow-y:auto; background:#fff; color:#0f172a;">
+    <div style="padding:16px 20px; background:#0f766e; color:#fff; display:flex; justify-content:space-between; align-items:center;">
+      <strong style="font-size:1.1rem; display:flex; align-items:center; gap:8px;">
+        <span style="font-size:1.3rem;">℞</span> Official Digital Prescription
+      </strong>
+      <button type="button" class="btn-ghost" id="rx-modal-close" style="color:#fff; border:none; padding:4px 8px; cursor:pointer;">✕ Close</button>
+    </div>
+
+    <!-- Letterhead Content -->
+    <div class="rx-letterhead" id="rx-printable-content">
+      <div class="rx-letterhead-header">
+        <div>
+          <div class="rx-hospital-name">MEDI-QUEUE ADVANCED HOSPITAL</div>
+          <div style="font-size:0.8rem; color:#64748b;">NABH Accredited Multi-Speciality Outpatient Center</div>
+          <div style="font-size:0.76rem; color:#94a3b8;">104 Health Boulevard, Metro Medical District · Phone: (022) 2490-8800</div>
+        </div>
+        <div class="rx-doctor-info">
+          <div style="font-weight:800; font-size:1.05rem; color:#0f172a;" id="rx-modal-doc-name">Dr. Rohan Verma</div>
+          <div style="color:#0f766e; font-weight:600;" id="rx-modal-doc-dept">General Medicine</div>
+          <div style="font-size:0.76rem; color:#64748b;" id="rx-modal-doc-lic">Reg. No: MCI-101556 · Room 101</div>
+        </div>
+      </div>
+
+      <div class="rx-patient-bar">
+        <div><strong>Patient:</strong> <span id="rx-p-name">Aditi Sharma</span></div>
+        <div><strong>Token:</strong> <span id="rx-p-token" style="font-family:monospace; font-weight:800; color:#0f766e;">G-231</span></div>
+        <div><strong>Age/Sex:</strong> <span id="rx-p-age">28 / F</span></div>
+        <div><strong>Date:</strong> <span id="rx-p-date">Today</span></div>
+      </div>
+
+      <div style="margin-bottom:16px;">
+        <div style="font-size:0.75rem; font-weight:700; color:#64748b; text-transform:uppercase;">Diagnosis:</div>
+        <div id="rx-p-diag" style="font-size:1rem; font-weight:700; color:#0f172a;">Acute Upper Respiratory Tract Infection</div>
+      </div>
+
+      <table style="width:100%; border-collapse:collapse; margin-bottom:20px;">
+        <thead>
+          <tr style="border-bottom:1.5px solid #cbd5e1; text-align:left; font-size:0.75rem; color:#64748b;">
+            <th style="padding:6px;">#</th>
+            <th style="padding:6px;">Medicine Name</th>
+            <th style="padding:6px;">Dosage</th>
+            <th style="padding:6px;">Frequency</th>
+            <th style="padding:6px;">Duration</th>
+            <th style="padding:6px;">Instructions</th>
+          </tr>
+        </thead>
+        <tbody id="rx-modal-meds-list">
+          <!-- Populated dynamically -->
+        </tbody>
+      </table>
+
+      <div style="margin-bottom:16px;">
+        <div style="font-size:0.75rem; font-weight:700; color:#64748b; text-transform:uppercase;">Investigations Ordered:</div>
+        <div id="rx-modal-labs" style="font-size:0.86rem; color:#1e293b;">Complete Blood Count (CBC)</div>
+      </div>
+
+      <div style="margin-bottom:16px;">
+        <div style="font-size:0.75rem; font-weight:700; color:#64748b; text-transform:uppercase;">Doctor's Advice:</div>
+        <div id="rx-modal-advice" style="font-size:0.86rem; color:#334155; line-height:1.5;">Hydrate adequately, warm saline gargles. Return if symptoms persist.</div>
+      </div>
+
+      <div class="rx-signature-row">
+        <div>
+          <span style="font-size:0.78rem; color:#64748b;">Follow-up: <strong id="rx-modal-followup" style="color:#0f172a;">After 5 days</strong></span>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-family:'Courier New', monospace; font-size:1.1rem; color:#0f766e; font-weight:700;">[DIGITALLY SIGNED]</div>
+          <div style="border-top:1px solid #94a3b8; width:160px; margin-top:4px; font-size:0.74rem; color:#64748b;">Treating Physician</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Actions -->
+    <div style="padding:16px 24px; background:#f8fafc; border-top:1px solid #e2e8f0; display:flex; justify-content:flex-end; gap:12px;">
+      <button type="button" class="btn btn-ghost btn-sm" id="rx-modal-close-btn" style="color:#475569;">Cancel</button>
+      <button type="button" class="btn btn-primary btn-sm" onclick="window.print()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        Print / Save PDF
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Toast Message Container ===== -->
+<div class="toast-container" id="toast-container"></div>
+
+<!-- ===== Footer with All-Page Links ===== -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="logo">
+          <span class="logo-mark">MQ</span>
+          MediQueue
+        </a>
+        <p>Smart outpatient queue coordination and clinical electronic workstation. Zero physical congestion, real-time sync.</p>
+        <span class="footer-tag">● Clinical OS 2.4 · 100% Client-Side JS</span>
+      </div>
+
+      <div class="footer-col">
+        <h4>Navigation</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="dashboard.html">Patient Dashboard</a></li>
+          <li><a href="doctor-dashboard.html">Doctor Dashboard</a></li>
+          <li><a href="book-appointment.html">Book Appointment</a></li>
+          <li><a href="my-token.html">Live Token Tracker</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Access & Security</h4>
+        <ul>
+          <li><a href="login.html">Login (Doctor / Patient)</a></li>
+          <li><a href="register.html">Register New Account</a></li>
+          <li><a href="settings.html">Account & Queue Settings</a></li>
+          <li><a href="forgot-password.html">Password Reset</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>OPD Departments</h4>
+        <ul>
+          <li>Cardiology · Room 204</li>
+          <li>General Medicine · Room 101</li>
+          <li>Orthopaedics · Room 118</li>
+          <li>Pediatrics · Room 302</li>
+          <li>Dermatology · Room 210</li>
+          <li>Neurology · Room 305</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© 2026 MediQueue Clinical Systems. All rights reserved.</span>
+      <span>
+        Connected to <strong>All Pages</strong> · 
+        <a href="dashboard.html" class="link-teal">Patient Dashboard</a> · 
+        <a href="book-appointment.html" class="link-teal">Book Slot</a> · 
+        <a href="my-token.html" class="link-teal">My Token</a>
+      </span>
+    </div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
